@@ -8,7 +8,7 @@ When a tab is marked:
 - A matching **coloured emoji** (🔴🟠🟡🟢🔵🟣🟤⚫⚪) is added in front of the tab title, so you can spot it even when tabs are narrow.
 - The toolbar icon shows a **★ badge** in that colour while the tab is active.
 
-Marks survive reloads and navigation in the same tab. They're cleared when you close the tab or the browser.
+Marks stay when you reload or navigate in the same tab, and they come back after you restart the browser if it reopens your tabs ("Continue where you left off"). Closing a tab removes its mark.
 
 ## Install (unpacked)
 
@@ -30,6 +30,7 @@ Marks survive reloads and navigation in the same tab. They're cleared when you c
 
 - Browsers don't let extensions change the actual colour of a tab, so this extension recolours the favicon and the title instead.
 - Browser pages (`chrome://`, `edge://`, the Chrome Web Store, Edge Add-ons) can't be modified by extensions. On those pages you can still mark the tab: it keeps its mark and toolbar badge and shows up in the popup list, but its favicon and title don't change.
+- After a restart, marks are matched to reopened tabs by web address for about two minutes. If several restored tabs share an address, the marks go to them in order.
 - If a site's favicon can't be read (because of cross-origin restrictions), the marked favicon is a plain dot in your colour.
 
 ## Files

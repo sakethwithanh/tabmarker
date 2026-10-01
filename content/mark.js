@@ -15,8 +15,22 @@
     generation: 0
   };
 
+  // Any of our emoji, not just the current one: after an extension reload a fresh
+  // copy of this script finds the previous copy's prefix still in the title.
+  const PREFIX_RE = /^(?:🔴|🟠|🟡|🟢|🔵|🟣|🟤|⚫|⚪) /u;
+
+  // After the extension is reloaded or updated this copy keeps running but can no longer
+  // talk to the extension. Stop it so it doesn't fight the freshly injected copy.
+  function orphaned() {
+    if (chrome.runtime?.id) return false;
+    state.titleObserver?.disconnect();
+    state.headObserver?.disconnect();
+    state.color = null;
+    return true;
+  }
+
   function stripPrefix(title) {
-    return state.prefix && title.startsWith(state.prefix) ? title.slice(state.prefix.length) : title;
+    return title.replace(PREFIX_RE, '');
   }
 
   function setTitle() {
@@ -30,6 +44,7 @@
     state.titleObserver?.disconnect();
     // Pages (e.g. Gmail, Slack) rewrite their title constantly; put our marker back each time.
     state.titleObserver = new MutationObserver(() => {
+      if (orphaned()) return;
       if (state.applying || !state.color) return;
       if (!document.title.startsWith(state.prefix)) setTitle();
     });
@@ -112,6 +127,7 @@
     state.headObserver?.disconnect();
     // If the page swaps its favicon later (unread counters etc.), keep ours on top.
     state.headObserver = new MutationObserver(() => {
+      if (orphaned()) return;
       if (!state.color) return;
       const added = iconLinks();
       if (!added.length) return;
@@ -125,6 +141,10 @@
 
   globalThis.__tabMarker = {
     apply(color, emoji) {
+      // Remove a favicon left behind by a previous copy of this script.
+      for (const link of document.querySelectorAll(`link[${ICON_ATTR}]`)) {
+        if (link !== state.iconLink) link.remove();
+      }
       const base = stripPrefix(document.title);
       state.color = color;
       state.prefix = emoji + ' ';

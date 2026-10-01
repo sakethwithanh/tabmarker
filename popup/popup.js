@@ -112,8 +112,7 @@ async function init() {
   });
   $('unmark').addEventListener('click', () => send({ type: 'unmark', tabId: currentTab.id }));
 
-  ({ marks = {} } = await chrome.storage.session.get('marks'));
-  await render();
+  await send({ type: 'get' });
 }
 
 init();
