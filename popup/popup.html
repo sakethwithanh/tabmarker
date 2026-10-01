@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tab Marker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <span id="current-dot" class="dot"></span>
+    <div class="current">
+      <div class="label" id="status">This tab is not marked</div>
+      <div class="title" id="current-title"></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>Pick a colour</h2>
+    <div class="swatches" id="presets"></div>
+
+    <div class="custom">
+      <label for="custom-color">Custom colour</label>
+      <input type="color" id="custom-color" value="#e53935">
+      <button id="apply-custom">Mark</button>
+    </div>
+
+    <div class="swatches" id="recent"></div>
+  </section>
+
+  <button id="unmark" class="secondary" hidden>Remove mark from this tab</button>
+
+  <section id="marked-section" hidden>
+    <h2>Marked tabs</h2>
+    <ul id="marked-list"></ul>
+  </section>
+
+  <footer>Shortcut: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> toggles the last colour</footer>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
